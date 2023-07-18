@@ -1,8 +1,5 @@
 package com.github.coderodde.compression.util;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author Rodion "rodde" Efremov
@@ -37,6 +34,10 @@ public final class Utils {
     }
     
     public static int computeNumberOfBitsToStore(int maximumValue) {
+        if (maximumValue == 0) {
+            return 1;
+        }
+            
         int bits = 0;
         
         while (maximumValue != 0) {

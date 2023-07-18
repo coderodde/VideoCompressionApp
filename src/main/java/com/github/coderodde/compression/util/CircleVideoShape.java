@@ -37,6 +37,4 @@ public final class CircleVideoShape {
     public void setCenterY(int centerY) {
         this.centerY = centerY;
     }
-    
-    
 }

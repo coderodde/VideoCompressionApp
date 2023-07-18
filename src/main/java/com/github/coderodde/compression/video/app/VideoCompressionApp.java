@@ -45,6 +45,11 @@ public final class VideoCompressionApp extends Application {
             videoScreenCanvas.paintCircleVideoShape();
         });
         
+        StackPane root = new StackPane();
+        root.getChildren().add(videoScreenCanvas);
+        stage.setScene(new Scene(root));
+        stage.show();
+        
         VideoRecordingThread videoRecordingThread = 
                 new VideoRecordingThread(
                         videoScreenCanvas, 
@@ -52,14 +57,13 @@ public final class VideoCompressionApp extends Application {
                                 .VideoCompressionAlgorithm
                                 .NO_COMPRESSION);
         
-        System.out.println("a");
         videoRecordingThread.start();
-        System.out.println("b");
         
-        StackPane root = new StackPane();
-        root.getChildren().add(videoScreenCanvas);
-        stage.setScene(new Scene(root));
-        stage.show();
+        try {
+            videoRecordingThread.join();
+        } catch (InterruptedException ex) {
+            
+        }
     }
     
     private static void showBeginRecordingHint() {
