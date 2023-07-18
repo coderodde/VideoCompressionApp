@@ -131,6 +131,8 @@ public final class BitArrayBuilder {
         } else {
             bitArray[longIndex] &= ~mask;
         }
+        
+        size++;
     }
     
     /**
