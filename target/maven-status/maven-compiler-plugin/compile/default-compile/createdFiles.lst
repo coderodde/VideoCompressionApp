@@ -2,6 +2,7 @@ com\github\coderodde\compression\util\Frame.class
 com\github\coderodde\compression\video\app\VideoCompressionApp.class
 com\github\coderodde\compression\video\app\VideoCompressionApp$1.class
 com\github\coderodde\compression\util\VideoScreenCanvas.class
+com\github\coderodde\compression\util\BitArrayBuilder.class
 com\github\coderodde\compression\util\VideoScreenCanvas$PixelColor.class
 com\github\coderodde\compression\video\app\VideoRecordingThread.class
 com\github\coderodde\compression\util\BitArray.class
