@@ -15,8 +15,8 @@ import javafx.scene.paint.Color;
  */
 public final class VideoScreenCanvas extends Canvas {
 
-    private static final int VIDEO_SCREEN_CANVAS_WIDTH = 1200;
-    private static final int VIDEO_SCREEN_CANVAS_HEIGHT = 800;
+    public static final int VIDEO_SCREEN_CANVAS_WIDTH = 1200;
+    public static final int VIDEO_SCREEN_CANVAS_HEIGHT = 800;
     private static final int CIRCLE_VIDEO_SHAPE_RADIUS = 100;
     
     public enum PixelColor {

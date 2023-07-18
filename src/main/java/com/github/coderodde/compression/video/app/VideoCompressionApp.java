@@ -18,7 +18,8 @@ import javafx.stage.Stage;
  */
 public final class VideoCompressionApp extends Application {
     
-    private static final int FRAMES_PER_SECOND = 25;
+    static final int FRAMES_PER_SECOND = 25;
+    static final int VIDEO_DURATION_SECONDS = 10;
     
     public static void main(String[] args) {
         launch(args);
@@ -32,23 +33,28 @@ public final class VideoCompressionApp extends Application {
         VideoScreenCanvas videoScreenCanvas = new VideoScreenCanvas();
         videoScreenCanvas.paintCircleVideoShape();
         
-        SleepDuration sleepDuration = 
-                Utils.getFrameSleepDuration(FRAMES_PER_SECOND);
-        
         videoScreenCanvas.addEventHandler(
-                MouseEvent.MOUSE_DRAGGED,
-                new EventHandler<>() {
+                MouseEvent.MOUSE_DRAGGED, 
+                (MouseEvent mouseEvent) -> {
                     
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                int x = (int) mouseEvent.getX();
-                int y = (int) mouseEvent.getY();
-                videoScreenCanvas.clear();
-                videoScreenCanvas.getCircleVideoShape().setCenterX(x);
-                videoScreenCanvas.getCircleVideoShape().setCenterY(y);
-                videoScreenCanvas.paintCircleVideoShape();
-            }
+            int x = (int) mouseEvent.getX();
+            int y = (int) mouseEvent.getY();
+            videoScreenCanvas.clear();
+            videoScreenCanvas.getCircleVideoShape().setCenterX(x);
+            videoScreenCanvas.getCircleVideoShape().setCenterY(y);
+            videoScreenCanvas.paintCircleVideoShape();
         });
+        
+        VideoRecordingThread videoRecordingThread = 
+                new VideoRecordingThread(
+                        videoScreenCanvas, 
+                        VideoRecordingThread
+                                .VideoCompressionAlgorithm
+                                .NO_COMPRESSION);
+        
+        System.out.println("a");
+        videoRecordingThread.start();
+        System.out.println("b");
         
         StackPane root = new StackPane();
         root.getChildren().add(videoScreenCanvas);
