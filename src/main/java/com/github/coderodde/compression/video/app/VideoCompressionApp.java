@@ -36,7 +36,6 @@ public final class VideoCompressionApp extends Application {
             videoScreenCanvas.getCircleVideoShape().setCenterX(x);
             videoScreenCanvas.getCircleVideoShape().setCenterY(y);
             videoScreenCanvas.paintCircleVideoShape();
-            System.out.println("x = " + x + ", y = " + y);
         });
         
         StackPane root = new StackPane();
@@ -44,24 +43,22 @@ public final class VideoCompressionApp extends Application {
         stage.setScene(new Scene(root));
         stage.show();
         
-        VideoRecordingThread videoRecordingThread = 
+        VideoRecordingThread videoRecordingThreadNoCompression = 
                 new VideoRecordingThread(
                         videoScreenCanvas, 
                         VideoRecordingThread
                                 .VideoCompressionAlgorithm
                                 .NO_COMPRESSION);
         
-        videoRecordingThread.start();
-//        
-//        try {
-//            videoRecordingThread.join();
-//        } catch (InterruptedException ex) {
-//            
-//        }
-//        
-//        System.out.println(
-//                "No compression bit array size: " + 
-//                        videoRecordingThread.getBitArrayBuilder().size());
+        VideoRecordingThread videoRecordingThreadNaiveCompression = 
+                new VideoRecordingThread(
+                        videoScreenCanvas, 
+                        VideoRecordingThread
+                                .VideoCompressionAlgorithm
+                                .NAIVE_COMPRESSOR);
+        
+        videoRecordingThreadNoCompression.start();
+        videoRecordingThreadNaiveCompression.start();
     }
     
     private static void showBeginRecordingHint() {

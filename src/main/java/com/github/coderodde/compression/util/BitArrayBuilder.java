@@ -162,9 +162,10 @@ public final class BitArrayBuilder {
             long[] newBitArray = 
                     Arrays.copyOf(
                             bitArray, 
-                            bitArray.length * Long.SIZE);
+                            Math.max(bitArray.length * 2, requestedCapacity));
             
-            System.arraycopy(bitArray, 0, newBitArray, 0, size);
+            int sizeToCopy = size / Long.SIZE + (size % Long.SIZE == 0 ? 0 : 1);
+            System.arraycopy(bitArray, 0, newBitArray, 0, sizeToCopy);
             bitArray = newBitArray;
         }
     }
