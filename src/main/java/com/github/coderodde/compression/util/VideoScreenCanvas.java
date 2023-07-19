@@ -2,7 +2,6 @@ package com.github.coderodde.compression.util;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 /**
@@ -18,40 +17,12 @@ public final class VideoScreenCanvas extends Canvas {
     public static final int VIDEO_SCREEN_CANVAS_HEIGHT = 800;
     private static final int CIRCLE_VIDEO_SHAPE_RADIUS = 100;
     
-    public enum PixelColor {
-        
-        WHITE(Color.WHITE),
-        BLACK(Color.BLACK);
-        
-        private final Color actualColor;
-        
-        private PixelColor(Color actualColor) {
-            this.actualColor = actualColor;
-        }
-        
-        public Color getColor() {
-            return actualColor;
-        }
-        
-        public static PixelColor parsePixelColor(Color color) {
-            if (color.equals(Color.WHITE)) {
-                return PixelColor.WHITE;
-            }
-            
-            if (color.equals(Color.BLACK)) {
-                return PixelColor.BLACK;
-            }
-            
-            throw new IllegalArgumentException("Unrecognized color: " + color);
-        }
-    }
-    
     private final GraphicsContext graphicsContext;
     private final CircleVideoShape circleVideoShape = 
             new CircleVideoShape(
-                    CIRCLE_VIDEO_SHAPE_RADIUS, 
-                    VIDEO_SCREEN_CANVAS_WIDTH / 2, 
-                    VIDEO_SCREEN_CANVAS_HEIGHT / 2);
+                    VIDEO_SCREEN_CANVAS_WIDTH, 
+                    VIDEO_SCREEN_CANVAS_HEIGHT,
+                    CIRCLE_VIDEO_SHAPE_RADIUS);
     
     private final int matrixWidth;
     private final int matrixHeight;
@@ -63,43 +34,8 @@ public final class VideoScreenCanvas extends Canvas {
         this.matrixHeight = VIDEO_SCREEN_CANVAS_HEIGHT;
         this.graphicsContext = getGraphicsContext2D();
         
-        graphicsContext.setFill(Color.WHITE);
-        graphicsContext.fillRect(0.0, 0.0, getWidth(), getHeight());
-        
-        addEventHandler(
-                MouseEvent.MOUSE_DRAGGED, 
-                (MouseEvent mouseEvent) -> {
-                    circleVideoShape.setCenterX((int) mouseEvent.getX());
-                    circleVideoShape.setCenterY((int) mouseEvent.getY());
-                    
-        });
-    }
-
-    public PixelColor getPixelColor(int x, int y) {
-        double circleCenterX = circleVideoShape.getCenterX();
-        double circleCenterY = circleVideoShape.getCenterY();
-        double radius = circleVideoShape.getRadius();
-        double dx = circleCenterX - x;
-        double dy = circleCenterY - y;
-        double distanceFromCircleCenter = Math.sqrt(dx * dx + dy * dy);
-        
-        if (distanceFromCircleCenter > radius) {
-            return PixelColor.WHITE;
-        } else {
-            return PixelColor.BLACK;
-        }
-    }
-    
-    public PixelColor[][] getPixels() {
-        PixelColor[][] pixelMatrix = new PixelColor[matrixHeight][matrixWidth];
-        
-        for (int y = 0; y < matrixHeight; y++) {
-            for (int x = 0; x < matrixWidth; x++) {
-                pixelMatrix[y][x] = getPixelColor(x, y);
-            }
-        }
-        
-        return pixelMatrix;
+        clear();
+        paintCircleVideoShape();
     }
     
     public void clear() {

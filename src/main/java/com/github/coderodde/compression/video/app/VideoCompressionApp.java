@@ -36,6 +36,7 @@ public final class VideoCompressionApp extends Application {
             videoScreenCanvas.getCircleVideoShape().setCenterX(x);
             videoScreenCanvas.getCircleVideoShape().setCenterY(y);
             videoScreenCanvas.paintCircleVideoShape();
+            System.out.println("x = " + x + ", y = " + y);
         });
         
         StackPane root = new StackPane();
@@ -51,16 +52,16 @@ public final class VideoCompressionApp extends Application {
                                 .NO_COMPRESSION);
         
         videoRecordingThread.start();
-        
-        try {
-            videoRecordingThread.join();
-        } catch (InterruptedException ex) {
-            
-        }
-        
-        System.out.println(
-                "No compression bit array size: " + 
-                        videoRecordingThread.getBitArrayBuilder().size());
+//        
+//        try {
+//            videoRecordingThread.join();
+//        } catch (InterruptedException ex) {
+//            
+//        }
+//        
+//        System.out.println(
+//                "No compression bit array size: " + 
+//                        videoRecordingThread.getBitArrayBuilder().size());
     }
     
     private static void showBeginRecordingHint() {

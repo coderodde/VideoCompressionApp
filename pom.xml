@@ -34,6 +34,30 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>3.3.0</version>
             </plugin>
+            
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.8</version>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <configuration>
+                            <mainClass>com.github.coderodde.compression.video.app.VideoCompressionApp</mainClass>
+                        </configuration>
+                    </execution>
+                    
+                    <execution>
+                        <id>debug</id>
+                        <configuration>
+                            <options>
+                                <option>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:8000</option>
+                            </options>
+                            <mainClass>com.github.coderodde.compression.video.app.VideoCompressionApp</mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     
@@ -41,21 +65,21 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx</artifactId>
-            <version>18.0.1</version>
+            <version>20</version>
             <type>pom</type>
         </dependency>
         
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
-            <version>18</version>
+            <version>20</version>
             <type>jar</type>
         </dependency>
         
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>18</version>
+            <version>20</version>
             <type>jar</type>
         </dependency>
         
