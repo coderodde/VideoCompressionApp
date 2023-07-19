@@ -1,6 +1,7 @@
 package com.github.coderodde.compression.util;
 
 import java.util.Arrays;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -31,5 +32,14 @@ public final class BitArrayBuilderTest {
         };
         
         assertTrue(Arrays.equals(expectedBytes, bytes));
+        
+        long dataBits = builder.readBits(2, 5);
+        assertEquals(0b10010L, dataBits);
+        
+        dataBits = builder.readBits(3, 4);
+        assertEquals(0b1001L, dataBits);
+        
+        dataBits = builder.readBits(72, 4);
+        assertEquals(0b1000L, dataBits);
     }
 }

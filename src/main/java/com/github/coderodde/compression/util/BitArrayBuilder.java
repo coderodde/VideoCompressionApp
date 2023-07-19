@@ -59,6 +59,28 @@ public final class BitArrayBuilder {
         }
     }
     
+    public long readBits(int index, int length) {
+        long ret = 0L;
+        
+        for (int i = index, bitIndex = 0; i < index + length; i++, bitIndex++) {
+            boolean bit = readBit(i);
+            
+            if (bit) {
+                ret |= (1 << bitIndex);
+            }
+        }
+        
+        return ret;
+    }
+    
+    private boolean readBit(int index) {
+        int longIndex = index / Long.SIZE;
+        long dataLong = bitArray[longIndex];
+        index %= Long.SIZE;
+        long mask = 1L << index;
+        return (dataLong & mask) != 0;
+    }
+    
     /**
      * Returns the shortest byte array capable of holding all the bits in this
      * bit array builder.
