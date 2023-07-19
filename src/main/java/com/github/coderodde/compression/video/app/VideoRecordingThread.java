@@ -7,10 +7,6 @@ import com.github.coderodde.compression.util.VideoScreenCanvas;
 import com.github.coderodde.compression.util.VideoScreenCanvas.PixelColor;
 import javafx.application.Platform;
 
-/**
- *
- * @author rodio
- */
 public final class VideoRecordingThread extends Thread {
     
     public enum VideoCompressionAlgorithm {
@@ -33,6 +29,7 @@ public final class VideoRecordingThread extends Thread {
                               VideoCompressionApp.VIDEO_DURATION_SECONDS;
         
         this.compressionAlgorithm = compressionAlgorithm;
+        
     }
     
     @Override

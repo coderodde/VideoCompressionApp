@@ -40,6 +40,10 @@ public final class BitArrayBuilder {
         this.bitArray = new long[getInitialNumberOfLongs(initialNumberOfBits)];
     }
     
+    public int size() {
+        return size;
+    }
+    
     /**
      * Appends {@code length} least-significant bits from {@code bitsToAppend} 
      * to this bit array builder.

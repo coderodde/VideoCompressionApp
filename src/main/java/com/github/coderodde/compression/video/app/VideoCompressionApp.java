@@ -1,10 +1,7 @@
 package com.github.coderodde.compression.video.app;
 
-import com.github.coderodde.compression.util.Utils;
-import com.github.coderodde.compression.util.Utils.SleepDuration;
 import com.github.coderodde.compression.util.VideoScreenCanvas;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -12,10 +9,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-/**
- *
- * @author rodio
- */
 public final class VideoCompressionApp extends Application {
     
     static final int FRAMES_PER_SECOND = 25;
@@ -64,6 +57,10 @@ public final class VideoCompressionApp extends Application {
         } catch (InterruptedException ex) {
             
         }
+        
+        System.out.println(
+                "No compression bit array size: " + 
+                        videoRecordingThread.getBitArrayBuilder().size());
     }
     
     private static void showBeginRecordingHint() {

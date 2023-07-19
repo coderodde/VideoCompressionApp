@@ -2,8 +2,6 @@ package com.github.coderodde.compression.util;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
@@ -121,10 +119,4 @@ public final class VideoScreenCanvas extends Canvas {
     public CircleVideoShape getCircleVideoShape() {
         return circleVideoShape;
     }
-    
-//    private PixelColor getPixelColor(int x, int y) {
-//        WritableImage writableImage = snapshot(null, null);
-//        Color color = writableImage.getPixelReader().getColor(x, y);
-//        return PixelColor.parsePixelColor(color);
-//    }
 }
