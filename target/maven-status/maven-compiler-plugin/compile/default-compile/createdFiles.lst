@@ -7,4 +7,5 @@ com\github\coderodde\compression\util\VideoScreenCanvas.class
 com\github\coderodde\compression\util\BitArrayBuilder.class
 com\github\coderodde\compression\video\app\VideoRecordingThread$VideoCompressionAlgorithm.class
 com\github\coderodde\compression\video\app\VideoRecordingThread.class
+com\github\coderodde\compression\video\app\VideoCoordinatorThread.class
 com\github\coderodde\compression\video\app\VideoRecordingThread$1.class

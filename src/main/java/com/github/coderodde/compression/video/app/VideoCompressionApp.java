@@ -59,6 +59,13 @@ public final class VideoCompressionApp extends Application {
         
         videoRecordingThreadNoCompression.start();
         videoRecordingThreadNaiveCompression.start();
+        
+        VideoCoordinatorThread videoCoordinatorThread = 
+                new VideoCoordinatorThread(
+                        videoRecordingThreadNoCompression,
+                        videoRecordingThreadNaiveCompression);
+        
+        videoCoordinatorThread.start();
     }
     
     private static void showBeginRecordingHint() {
