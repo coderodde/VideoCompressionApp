@@ -8,6 +8,7 @@ import com.github.coderodde.compression.util.VideoScreenCanvas;
 import java.awt.Point;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.application.Platform;
 
 public final class VideoRecordingThread extends Thread {
@@ -21,6 +22,7 @@ public final class VideoRecordingThread extends Thread {
     private final VideoScreenCanvas videoScreenCanvas;
     private final VideoCompressionAlgorithm compressionAlgorithm;
     private BitArrayBuilder bitArrayBuilder;
+    private final AtomicBoolean isRunning = new AtomicBoolean(true);
     
     public VideoRecordingThread(
             VideoScreenCanvas videoScreenCanvas,
@@ -34,15 +36,21 @@ public final class VideoRecordingThread extends Thread {
         this.compressionAlgorithm = compressionAlgorithm;
     }
     
+    public boolean isRunning() {
+        return isRunning.get();
+    }
+    
     @Override
     public void run() {
         switch (compressionAlgorithm) {
             case NO_COMPRESSION:
                 recordWithNoCompression();
+                isRunning.set(false);
                 return;
                 
             case NAIVE_COMPRESSOR:
                 recordWithNaiveCompression();
+                isRunning.set(false);
                 return;
         }
         
