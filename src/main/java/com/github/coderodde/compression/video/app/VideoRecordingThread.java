@@ -13,7 +13,7 @@ import javafx.application.Platform;
 
 public final class VideoRecordingThread extends Thread {
     
-    public enum VideoCompressionAlgorithm {
+    public static enum VideoCompressionAlgorithm {
         NO_COMPRESSION,
         NAIVE_COMPRESSOR;
     }
