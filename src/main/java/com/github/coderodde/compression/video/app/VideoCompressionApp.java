@@ -1,6 +1,7 @@
 package com.github.coderodde.compression.video.app;
 
 import com.github.coderodde.compression.util.VideoScreenCanvas;
+import javafx.event.EventHandler;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -26,18 +27,23 @@ public final class VideoCompressionApp extends Application {
         VideoScreenCanvas videoScreenCanvas = new VideoScreenCanvas();
         videoScreenCanvas.paintCircleVideoShape();
         
+        EventHandler<MouseEvent> mouseEventHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                int x = (int) mouseEvent.getX();
+                int y = (int) mouseEvent.getY();
+                videoScreenCanvas.clear();
+                videoScreenCanvas.getCircleVideoShape().setCenterX(x);
+                videoScreenCanvas.getCircleVideoShape().setCenterY(y);
+                videoScreenCanvas.paintCircleVideoShape();
+            }
+        };
+        
         videoScreenCanvas.addEventHandler(
                 MouseEvent.MOUSE_DRAGGED, 
-                (MouseEvent mouseEvent) -> {
-                    
-            int x = (int) mouseEvent.getX();
-            int y = (int) mouseEvent.getY();
-            videoScreenCanvas.clear();
-            videoScreenCanvas.getCircleVideoShape().setCenterX(x);
-            videoScreenCanvas.getCircleVideoShape().setCenterY(y);
-            videoScreenCanvas.paintCircleVideoShape();
-        });
+                mouseEventHandler);
         
+        stage.setResizable(false);
         StackPane root = new StackPane();
         root.getChildren().add(videoScreenCanvas);
         stage.setScene(new Scene(root));

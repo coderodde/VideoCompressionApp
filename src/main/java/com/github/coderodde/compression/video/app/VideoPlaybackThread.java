@@ -37,7 +37,7 @@ public final class VideoPlaybackThread extends Thread {
                 return;
                 
             case NAIVE_COMPRESSOR:
-                
+                playbackWithNaiveCompressor();
                 return;
                 
             default:
@@ -58,7 +58,7 @@ public final class VideoPlaybackThread extends Thread {
                              VideoCompressionApp.VIDEO_DURATION_SECONDS; 
                 frameIndex++) {
             
-            Color[][] framePixels = getFramePixels(frameBitsStartIndex);
+            loadFramePixels(frameBitsStartIndex);
             
             draw(framePixels);
             
@@ -67,7 +67,7 @@ public final class VideoPlaybackThread extends Thread {
         }
     }
     
-    private Color[][] getFramePixels(int frameBitStartIndex) {
+    private void loadFramePixels(int frameBitStartIndex) {
         int bitIndex = frameBitStartIndex;
         
         for (int y = 0; y < framePixels.length; y++) {
@@ -81,12 +81,102 @@ public final class VideoPlaybackThread extends Thread {
                 }
             }
         }
-        
-        return framePixels;
     }
     
     private void draw(Color[][] framePixels) {
         videoScreenCanvas.drawFrame(
                 videoScreenCanvas.convertFramePixelsToImage(framePixels));
     }
+    
+    private void playbackWithNaiveCompressor() {
+        long sleepDuration = 1000L / VideoCompressionApp.FRAMES_PER_SECOND;
+        
+        int frameBitLength = VideoScreenCanvas.VIDEO_SCREEN_CANVAS_HEIGHT *
+                             VideoScreenCanvas.VIDEO_SCREEN_CANVAS_WIDTH;
+        
+        // Draw the initial frame.
+        loadFramePixels(0);
+        draw(framePixels);
+        
+        Color[][] previousPixels = framePixels;
+        
+        
+        BitIndexHolder bitIndexHolder = new BitIndexHolder();
+        bitIndexHolder.bitIndex = frameBitLength;
+        
+        for (int frameIndex = 1; 
+                frameIndex < VideoCompressionApp.FRAMES_PER_SECOND * 
+                             VideoCompressionApp.VIDEO_DURATION_SECONDS; 
+                frameIndex++) {
+            
+            Color[][] nextPixels = 
+                    loadNextPixels(
+                            previousPixels, 
+                            bitIndexHolder);
+            
+            draw(nextPixels);
+            
+            previousPixels = nextPixels;
+            Utils.sleep(sleepDuration);
+        }   
+    }
+    
+    private Color[][] loadNextPixels(Color[][] previousPixels,
+                                     BitIndexHolder bitIndexHolder) {
+        int bitsInNumberOfPixels = 
+                Utils.computeNumberOfBitsToStore(
+                        VideoScreenCanvas.VIDEO_SCREEN_CANVAS_HEIGHT *
+                        VideoScreenCanvas.VIDEO_SCREEN_CANVAS_WIDTH);
+        
+        int bitsInXCoordinate = 
+                Utils.computeNumberOfBitsToStore(
+                        VideoScreenCanvas.VIDEO_SCREEN_CANVAS_WIDTH);
+    
+        int bitsInYCoordinate = 
+                Utils.computeNumberOfBitsToStore(
+                        VideoScreenCanvas.VIDEO_SCREEN_CANVAS_HEIGHT);
+        
+        int numberOfChangedPixels = 
+                (int) bitArrayBuilder.readBits(
+                        bitIndexHolder.bitIndex,
+                        bitsInNumberOfPixels);
+        
+        System.out.println(bitsInNumberOfPixels + " " + bitsInXCoordinate + " " + bitsInYCoordinate);
+        
+        bitIndexHolder.bitIndex += bitsInNumberOfPixels;
+        Color[][] nextPixels = 
+                new Color[VideoScreenCanvas.VIDEO_SCREEN_CANVAS_HEIGHT]
+                         [VideoScreenCanvas.VIDEO_SCREEN_CANVAS_WIDTH];
+        
+        for (int pixelIndex = 0; 
+                pixelIndex < numberOfChangedPixels; 
+                pixelIndex++) {
+            int x = 
+                    (int) bitArrayBuilder.readBits(
+                            bitIndexHolder.bitIndex, 
+                            bitsInXCoordinate);
+            
+            bitIndexHolder.bitIndex += bitsInXCoordinate;
+            
+            int y = 
+                    (int) bitArrayBuilder.readBits(
+                            bitIndexHolder.bitIndex,
+                            bitsInYCoordinate);
+            
+            bitIndexHolder.bitIndex += bitsInYCoordinate;
+            Color previousPixelColor = previousPixels[y][x];
+            Color nextPixelColor = flipColor(previousPixelColor);
+            nextPixels[y][x] = nextPixelColor;
+        }
+        
+        return nextPixels;
+    }
+    
+    private static Color flipColor(Color color) {
+        return color == Color.WHITE ? Color.BLACK : Color.WHITE;
+    }
+    
+    private static class BitIndexHolder {
+        int bitIndex;
+    } 
 }

@@ -77,5 +77,19 @@ public final class VideoCoordinatorThread extends Thread {
             
             alert.showAndWait();
         });
+        
+        VideoPlaybackThread naiveCompressorVideoPlaybackThread = 
+            new VideoPlaybackThread(
+                videoScreenCanvas, 
+                VideoRecordingThread.VideoCompressionAlgorithm.NO_COMPRESSION,
+                nonCompressiveVideoRecordingThread.getBitArrayBuilder());
+        
+        naiveCompressorVideoPlaybackThread.start();
+        
+        try {
+            naiveCompressorVideoPlaybackThread.join();
+        } catch (InterruptedException ex) {
+            
+        }
     }
 }
