@@ -41,6 +41,21 @@ public final class VideoCoordinatorThread extends Thread {
                     "After pressing OK, a recording via non-compressive " + 
                     "recording starts.");
             
+            alert.setContentText("Press OK, to view non-compressed video.");
+            
+            alert.showAndWait();
+        });
+        
+        Platform.runLater(() -> {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Before playback");
+            alert.setHeaderText(
+                    "After pressing OK, a recording via naively-compressed  " + 
+                    "recording starts.");
+            
+            alert.setContentText(
+                    "Press OK, to view the video with naive compressor.");
+            
             alert.showAndWait();
         });
     }

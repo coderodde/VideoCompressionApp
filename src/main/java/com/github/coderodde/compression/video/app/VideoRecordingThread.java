@@ -158,7 +158,9 @@ public final class VideoRecordingThread extends Thread {
         }
         
         int changedPixelPointsBitLength = 
-                Utils.computeNumberOfBitsToStore(changedPixelPoints.size());
+                Utils.computeNumberOfBitsToStore(
+                        VideoScreenCanvas.VIDEO_SCREEN_CANVAS_WIDTH * 
+                        VideoScreenCanvas.VIDEO_SCREEN_CANVAS_HEIGHT);
         
         bitArrayBuilder.appendBits(changedPixelPoints.size(),
                                    changedPixelPointsBitLength);
