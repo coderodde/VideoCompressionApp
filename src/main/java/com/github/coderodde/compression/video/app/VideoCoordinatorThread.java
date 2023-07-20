@@ -1,6 +1,7 @@
 package com.github.coderodde.compression.video.app;
 
 import com.github.coderodde.compression.util.Utils;
+import com.github.coderodde.compression.util.VideoScreenCanvas;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -13,12 +14,16 @@ public final class VideoCoordinatorThread extends Thread {
     
     private static final long ITERATION_SLEEP_DURATION = 100L;
     
+    private final VideoScreenCanvas videoScreenCanvas;
     private final VideoRecordingThread nonCompressiveVideoRecordingThread;
     private final VideoRecordingThread naiveCompressingVideoRecordingThread;
     
     public VideoCoordinatorThread(
+            VideoScreenCanvas videoScreenCanvas,
             VideoRecordingThread nonCompressiveVideoRecordingThread,
             VideoRecordingThread naiveCompressingVideoRecordingThread) {
+        
+        this.videoScreenCanvas = videoScreenCanvas;
         
         this.nonCompressiveVideoRecordingThread = 
                 nonCompressiveVideoRecordingThread;
@@ -45,6 +50,20 @@ public final class VideoCoordinatorThread extends Thread {
             
             alert.showAndWait();
         });
+        
+        VideoPlaybackThread nonCompressiveVideoPlaybackThread = 
+            new VideoPlaybackThread(
+                videoScreenCanvas, 
+                VideoRecordingThread.VideoCompressionAlgorithm.NO_COMPRESSION,
+                nonCompressiveVideoRecordingThread.getBitArrayBuilder());
+        
+        nonCompressiveVideoPlaybackThread.start();
+        
+        try {
+            nonCompressiveVideoPlaybackThread.join();
+        } catch (InterruptedException ex) {
+            
+        }
         
         Platform.runLater(() -> {
             Alert alert = new Alert(AlertType.INFORMATION);

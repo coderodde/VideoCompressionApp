@@ -36,6 +36,10 @@ public final class VideoRecordingThread extends Thread {
         this.compressionAlgorithm = compressionAlgorithm;
     }
     
+    public BitArrayBuilder getBitArrayBuilder() {
+        return this.bitArrayBuilder;
+    }
+    
     public boolean isRunning() {
         return isRunning.get();
     }

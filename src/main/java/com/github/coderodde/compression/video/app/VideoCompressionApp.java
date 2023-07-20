@@ -62,6 +62,7 @@ public final class VideoCompressionApp extends Application {
         
         VideoCoordinatorThread videoCoordinatorThread = 
                 new VideoCoordinatorThread(
+                        videoScreenCanvas,
                         videoRecordingThreadNoCompression,
                         videoRecordingThreadNaiveCompression);
         
