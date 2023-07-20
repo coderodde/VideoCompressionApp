@@ -1,7 +1,7 @@
 package com.github.coderodde.compression.video.app;
 
 import com.github.coderodde.compression.util.BitArrayBuilder;
-import com.github.coderodde.compression.util.CircleVideoShape;
+import com.github.coderodde.compression.util.Utils;
 import com.github.coderodde.compression.util.VideoScreenCanvas;
 import static com.github.coderodde.compression.video.app.VideoRecordingThread.VideoCompressionAlgorithm.*;
 import javafx.scene.paint.Color;
@@ -15,6 +15,9 @@ public final class VideoPlaybackThread extends Thread {
     private final VideoScreenCanvas videoScreenCanvas;
     private final VideoRecordingThread.VideoCompressionAlgorithm algorithm;
     private final BitArrayBuilder bitArrayBuilder;
+    private final Color[][] framePixels = 
+            new Color[VideoScreenCanvas.VIDEO_SCREEN_CANVAS_HEIGHT]
+                     [VideoScreenCanvas.VIDEO_SCREEN_CANVAS_WIDTH];
     
     public VideoPlaybackThread(
             VideoScreenCanvas videoScreenCanvas,
@@ -45,6 +48,7 @@ public final class VideoPlaybackThread extends Thread {
     
     private void playbackWithNoCompression() {
         long sleepDuration = 1000L / VideoCompressionApp.FRAMES_PER_SECOND;
+        
         int frameBitsStartIndex = 0;
         int frameBitLength = VideoScreenCanvas.VIDEO_SCREEN_CANVAS_HEIGHT *
                              VideoScreenCanvas.VIDEO_SCREEN_CANVAS_WIDTH;
@@ -59,15 +63,11 @@ public final class VideoPlaybackThread extends Thread {
             draw(framePixels);
             
             frameBitsStartIndex += frameBitLength;
+            Utils.sleep(sleepDuration);
         }
     }
     
     private Color[][] getFramePixels(int frameBitStartIndex) {
-        
-        Color[][] framePixels = 
-                new Color[VideoScreenCanvas.VIDEO_SCREEN_CANVAS_HEIGHT]
-                         [VideoScreenCanvas.VIDEO_SCREEN_CANVAS_WIDTH];
-        
         int bitIndex = frameBitStartIndex;
         
         for (int y = 0; y < framePixels.length; y++) {
@@ -86,6 +86,7 @@ public final class VideoPlaybackThread extends Thread {
     }
     
     private void draw(Color[][] framePixels) {
-        
+        videoScreenCanvas.drawFrame(
+                videoScreenCanvas.convertFramePixelsToImage(framePixels));
     }
 }

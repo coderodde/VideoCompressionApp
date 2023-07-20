@@ -2,7 +2,9 @@ package com.github.coderodde.compression.util;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
 /**
@@ -53,14 +55,25 @@ public final class VideoScreenCanvas extends Canvas {
                 circleVideoShape.getRadius() * 2);
     }
     
-    public void paintFrame(Color[][] framePixels) {
-        PixelWriter pixelWriter = graphicsContext.getPixelWriter();
+    public void drawFrame(Image image) {
+        graphicsContext.drawImage(image, 0.0, 0.0);
+    }
+    
+    public Image convertFramePixelsToImage(Color[][] framePixels) {
+        WritableImage raster = 
+                new WritableImage(
+                        framePixels[0].length, 
+                        framePixels.length);
+        
+        PixelWriter pixelWriter = raster.getPixelWriter();
         
         for (int y = 0; y < framePixels.length; y++) {
             for (int x = 0; x < framePixels[0].length; x++) {
                 pixelWriter.setColor(x, y, framePixels[y][x]);
             }
         }
+        
+        return raster;
     }
     
     public CircleVideoShape getCircleVideoShape() {
