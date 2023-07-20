@@ -21,7 +21,7 @@ public final class VideoCompressionApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        stage.setTitle("VideoCompressionApp 1.6");
+        stage.setTitle("VideoCompressionApp 1.6 - by coderodde");
         showBeginRecordingHint();
         
         VideoScreenCanvas videoScreenCanvas = new VideoScreenCanvas();
@@ -63,6 +63,7 @@ public final class VideoCompressionApp extends Application {
                                 .VideoCompressionAlgorithm
                                 .NAIVE_COMPRESSOR);
         
+        // Start recording.
         videoRecordingThreadNoCompression.start();
         videoRecordingThreadNaiveCompression.start();
         

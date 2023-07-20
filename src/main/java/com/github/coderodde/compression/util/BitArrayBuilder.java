@@ -40,6 +40,11 @@ public final class BitArrayBuilder {
         this.bitArray = new long[getInitialNumberOfLongs(initialNumberOfBits)];
     }
     
+    /**
+     * Returns the number of bits stored in this builder.
+     * 
+     * @return the number of bits.
+     */
     public int size() {
         return size;
     }
@@ -59,6 +64,13 @@ public final class BitArrayBuilder {
         }
     }
     
+    /**
+     * Reads {@code length} bits starting from index {@code index}.
+     * 
+     * @param index  the leftmost index of the bit range to read.
+     * @param length the length of the bit range to read.
+     * @return the {@code length} bits.
+     */
     public long readBits(int index, int length) {
         long ret = 0L;
         
@@ -73,6 +85,12 @@ public final class BitArrayBuilder {
         return ret;
     }
     
+    /**
+     * Reads the {@code index}th bit.
+     * 
+     * @param index the index of the bit to read.
+     * @return a bit, {@code true} for the 1 and {@code false} for the 0.
+     */
     private boolean readBit(int index) {
         int longIndex = index / Long.SIZE;
         long dataLong = bitArray[longIndex];

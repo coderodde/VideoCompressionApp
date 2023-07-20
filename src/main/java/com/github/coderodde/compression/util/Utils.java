@@ -1,7 +1,8 @@
 package com.github.coderodde.compression.util;
 
 /**
- *
+ * This class contains various utility methods.
+ * 
  * @author Rodion "rodde" Efremov
  * @version 1.6 (Jul 18, 2023)
  * @since 1.6 (Jul 18, 2023)
@@ -33,6 +34,13 @@ public final class Utils {
         }
     }
     
+    /**
+     * Returns the minimum number of bits sufficient to store the value
+     * {@code maximumValue}.
+     * 
+     * @param maximumValue the integer value we wish to store.
+     * @return number of bits sufficient to store the input value.
+     */
     public static int computeNumberOfBitsToStore(int maximumValue) {
         if (maximumValue == 0) {
             return 1;
@@ -48,6 +56,12 @@ public final class Utils {
         return bits;
     }
     
+    /**
+     * Returns the number of nanoseconds which it takes to call the 
+     * {@link Trhead.sleep}.
+     * 
+     * @return the number of nanoseconds. 
+     */
     public static long getThreadSleepCallDuration() {
         long start = System.nanoTime();
         sleep(0L);

@@ -7,8 +7,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 /**
- *
- * @author Potilaskone
+ * This thread is a fast drop-in for coordinating the playback threads.
+ * 
+ * @author Rodion "rodde" Efremov
+ * @version 1.6 (Jul 
  */
 public final class VideoCoordinatorThread extends Thread {
     
@@ -80,7 +82,7 @@ public final class VideoCoordinatorThread extends Thread {
         
         VideoPlaybackThread naiveCompressorVideoPlaybackThread = 
             new VideoPlaybackThread(
-                videoScreenCanvas, 
+                videoScreenCanvas,  
                 VideoRecordingThread.VideoCompressionAlgorithm.NO_COMPRESSION,
                 nonCompressiveVideoRecordingThread.getBitArrayBuilder());
         
