@@ -1,4 +1,3 @@
-com\github\coderodde\compression\util\Frame.class
 com\github\coderodde\compression\video\app\VideoCompressionApp.class
 com\github\coderodde\compression\video\app\VideoPlaybackThread.class
 com\github\coderodde\compression\util\PixelColor.class

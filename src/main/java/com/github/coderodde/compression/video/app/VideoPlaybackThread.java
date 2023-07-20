@@ -7,8 +7,11 @@ import static com.github.coderodde.compression.video.app.VideoRecordingThread.Vi
 import javafx.scene.paint.Color;
 
 /**
- *
- * @author rodio
+ * This class implements the video playback thread.
+ * 
+ * @author Rodion "rodde" Efremov
+ * @version 1.6 (Jul 20, 2023)
+ * @since 1.6 (Jul 20, 2023)
  */
 public final class VideoPlaybackThread extends Thread {
     
@@ -58,10 +61,12 @@ public final class VideoPlaybackThread extends Thread {
                              VideoCompressionApp.VIDEO_DURATION_SECONDS; 
                 frameIndex++) {
             
+            // Load framePixels with new pixels:
             loadFramePixels(frameBitsStartIndex);
             
             draw(framePixels);
             
+            // Advance towards the next frame:
             frameBitsStartIndex += frameBitLength;
             Utils.sleep(sleepDuration);
         }
@@ -94,12 +99,11 @@ public final class VideoPlaybackThread extends Thread {
         int frameBitLength = VideoScreenCanvas.VIDEO_SCREEN_CANVAS_HEIGHT *
                              VideoScreenCanvas.VIDEO_SCREEN_CANVAS_WIDTH;
         
-        // Draw the initial frame.
+        // Draw the initial frame:
         loadFramePixels(0);
         draw(framePixels);
         
         Color[][] previousPixels = framePixels;
-        
         
         BitIndexHolder bitIndexHolder = new BitIndexHolder();
         bitIndexHolder.bitIndex = frameBitLength;
@@ -109,6 +113,7 @@ public final class VideoPlaybackThread extends Thread {
                              VideoCompressionApp.VIDEO_DURATION_SECONDS; 
                 frameIndex++) {
             
+            // Get the next frame::
             Color[][] nextPixels = 
                     loadNextPixels(
                             previousPixels, 
@@ -123,25 +128,31 @@ public final class VideoPlaybackThread extends Thread {
     
     private Color[][] loadNextPixels(Color[][] previousPixels,
                                      BitIndexHolder bitIndexHolder) {
+        // Compute the minimum number of bits sufficient to represent the
+        // integer no larger than the number of pixels in a frame:
         int bitsInNumberOfPixels = 
                 Utils.computeNumberOfBitsToStore(
                         VideoScreenCanvas.VIDEO_SCREEN_CANVAS_HEIGHT *
                         VideoScreenCanvas.VIDEO_SCREEN_CANVAS_WIDTH);
         
+        // Compute the minimum number of bits sufficient to represent any valid
+        // pixel X-coordinate:
         int bitsInXCoordinate = 
                 Utils.computeNumberOfBitsToStore(
                         VideoScreenCanvas.VIDEO_SCREEN_CANVAS_WIDTH);
     
+        // Compute the minimum number of bits sufficient to represent any valid
+        // pixel Y-coordinate:
         int bitsInYCoordinate = 
                 Utils.computeNumberOfBitsToStore(
                         VideoScreenCanvas.VIDEO_SCREEN_CANVAS_HEIGHT);
         
+        // Read the number of pixels that changed between the previous and
+        // next frames:
         int numberOfChangedPixels = 
                 (int) bitArrayBuilder.readBits(
                         bitIndexHolder.bitIndex,
                         bitsInNumberOfPixels);
-        
-        System.out.println(bitsInNumberOfPixels + " " + bitsInXCoordinate + " " + bitsInYCoordinate);
         
         bitIndexHolder.bitIndex += bitsInNumberOfPixels;
         Color[][] nextPixels = 
@@ -151,18 +162,24 @@ public final class VideoPlaybackThread extends Thread {
         for (int pixelIndex = 0; 
                 pixelIndex < numberOfChangedPixels; 
                 pixelIndex++) {
+            // Read the X-coordinate of the pixel that changed between previous
+            // and next frames:
             int x = 
                     (int) bitArrayBuilder.readBits(
                             bitIndexHolder.bitIndex, 
                             bitsInXCoordinate);
             
+            // Advance towards the Y-coordinate:
             bitIndexHolder.bitIndex += bitsInXCoordinate;
             
+            // Read the Y-coordinate of the pixel that changed between previous
+            // and next frames:
             int y = 
                     (int) bitArrayBuilder.readBits(
                             bitIndexHolder.bitIndex,
                             bitsInYCoordinate);
             
+            // Advance towards the next pixel:
             bitIndexHolder.bitIndex += bitsInYCoordinate;
             Color previousPixelColor = previousPixels[y][x];
             Color nextPixelColor = flipColor(previousPixelColor);
